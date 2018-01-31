@@ -1,8 +1,6 @@
-= GNU Radio Improvement Proposal Elephants
-
-[Note: I forgot what the acronym stood for. Need to fix that]
+# GREPs -- GNU Radio Enhancement Proposals
 
 Welcome to the GNU Radio enhancement proposal repository! Please consult
-[[gripe-0000-gripes]] for details on how to read this document, and participate
-in the enhancement processes.
+[grep-0000-greps](grep-0000-greps.md) for details on how to read this document,
+and participate in the enhancement processes.
 

@@ -1,11 +1,11 @@
-# GRIPE [XXXX] -- [Title]
+# GREP [XXXX] -- [Title]
 
 [Note: All parts in square brackets are meant to be replaced as part of
-authoring a new GRIPE]
+authoring a new GREP]
 
 - Original Author: [First Last <first.last@host.tld>]
 - Champion: [First Last <first.last@host.tld>]
-- Status: Draft [GRIPEs are always submitted as "Draft"]
+- Status: Draft [GREPs are always submitted as "Draft"]
 
 History:
 - 15-Oct-2016: Initial Draft
@@ -24,7 +24,7 @@ reader]
 ## Copyright / License
 
 [Pick a license and tell us who the copyright owner is. Unlike code, this does
-not need be assigned to the FSF, and authors can keep copyright. GRIPE 0000
+not need be assigned to the FSF, and authors can keep copyright. GREP 0000
 chose the CC-BY-ND license because we don't want modified copies of it all over
 the place]
 
