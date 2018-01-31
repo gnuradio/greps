@@ -6,7 +6,7 @@
 
 History:
 - 15-Oct-2016: Initial Draft
-- 31-Jan-2018: Updated and renamed to GREP
+- 31-Jan-2018: Updated and renamed to GREP, changed numbering assignment
 
 (may have multiple original authors)
 
@@ -149,20 +149,17 @@ In order to submit a GREP, the following process shall be followed:
 
 1. The author of the GREP needs her own version of the GREP repository.
    If necessary, the repository needs to be cloned first.
-2. A new GREP is added by copying the template (`grep-template.md`) and
+2. A new GREP is added by copying the template (`grep-9999-template.md`) and
    creating a new GREP file. The filename must follow the following naming
-   convention: `grep-XXXX-keyword.md`. `XXXX` is the next available
-   four-digit decimal number (every GREP has a unique number, counting upward).
+   convention: `grep-9999-keyword.md`. `9999` will be converted into a
+   four-digit decimal number (every GREP has a unique number, counting upward)
+   by an editor.
    The keyword can be any suitable word (or even multiple words) that
    will help identify the content, but should be kept short to keep the
    filenames manageable.
 3. The author fills out the template as explained.
 4. When complete, the author submits a pull request against the GREP
-   repository, with a single commit adding the new GREP file.
-   If multiple people submit a GREP, and two GREPs end up with the same
-   number, that is treated as a merge conflict and the original author of the
-   GREP needs to resolve by picking the next available four-digital decimal
-   number.
+   repository, adding the new GREP file.
 5. While the pull request is open, the editors, the author, and anyone else
    interested in the GREP cooperate to fix formal, orthographical, and
    stylistic shortcomings, as well as open issues with the actual content.
@@ -183,6 +180,7 @@ In order to submit a GREP, the following process shall be followed:
    which case they will not be considered for resubmission).
    Note: The idea is that there is a very low bar of adding GREPs into the
    repository.
+8. Otherwise, the editors will squash the commit and assign a GREP number.
 
 Once a GREP is in the repository, it is open for discussion.
 
