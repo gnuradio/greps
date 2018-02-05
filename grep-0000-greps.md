@@ -70,8 +70,8 @@ to:
 
 ### GREP Editors
 
-The PEP editors are individuals responsible for managing the administrative and
-editorial aspects of the PEP workflow (e.g. assigning PEP numbers and changing
+The GREP editors are individuals responsible for managing the administrative and
+editorial aspects of the GREP workflow (e.g. assigning GREP numbers and changing
 their status).
 
 The list of GREP editors always include:
@@ -135,7 +135,7 @@ The following diagram illustrates the process:
             |                                 |
  DRAFT +----+                                 +----> ACTIVE
    ^        |
-   |        +-+--> REJECTED
+   |        +-|--> REJECTED
    |          |
    |          +--> WITHDRAWN
    v
