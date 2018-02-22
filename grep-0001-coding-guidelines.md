@@ -57,12 +57,11 @@ and follow them.
 
 ### C++-specific Guidelines
 
-* If in doubt, consult the [C++ Core Guidelines][https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md].
+#### Implementation Guidelines
+* If in doubt, consult the [C++ Core Guidelines](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md).
   If the guidelines have an answer, and it works for you, just pick that.
   Rationale: Many things are subjective and it's a waste of energy discussing
   those.
-* Use Doxygen doc-blocks copiously. This makes it easier to maintain
-  auto-generated documentation.
 * All things equal, prefer standard C++ constructs over Boost constructs (see
   also Boost guidelines). Rationale: Boost is a 3rd party dependency, and we
   want to keep those at a minimum. Also, Boost regularly makes
@@ -73,6 +72,20 @@ and follow them.
   can thus be optimized better at compile time. In many cases, lambdas are
   also more readable than the `bind` calls, which have add their own
   syntactical idiosyncrasies (such as the `_1` argument etc.).
+* Feel free to use modern C/C++ features even if they were not used before.
+  Make sure they work with the compilers and dependencies which are set for the
+  version of GNU Radio the commit will be made upon. The GNU Radio CI system
+  will be able to confirm this. (Note: C++11 features are available starting
+  with GNU Radio version 3.8).
+
+#### Code Style Guidelines
+* Use the [LLVM code formatting guide](https://llvm.org/docs/CodingStandards.html#source-code-formatting). Following points will specify differences to it and highlight important points.
+* Do not indent namespaces
+* Use 4 spaces indentation width for new code.
+* Use spaces instead of tabs. If extending an existing file stick with the given indentation level. Do _not_ reindent a whole file and indent code consistently.
+* Before checking in code use tools in the code tree to sanitze your patches
+* Use Doxygen doc-blocks copiously. This makes it easier to maintain
+  auto-generated documentation.
 * Include include files in the following order: Local headers, other GNU Radio
   headers, 3rd-party library headers, Boost headers, standard headers.
   The rationale is to include from most to least specific. This is the best way
@@ -88,12 +101,6 @@ and follow them.
 #include <boost/shared_ptr.hpp>
 #include <mutex>
 ```
-
-* Feel free to use modern C/C++ features even if they were not used before.
-  Make sure they work with the compilers and dependencies which are set for the
-  version of GNU Radio the commit will be made upon. The GNU Radio CI system
-  will be able to confirm this. (Note: C++11 features are available starting
-  with GNU Radio version 3.8).
 
 
 ## Boost-specific Guidelines
@@ -152,4 +159,3 @@ and follow them.
   cleanup commits.
 * Remember that we create git repositories, not just code. This means every
   commit is part of our project and should be treated as such.
-
