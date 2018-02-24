@@ -111,6 +111,16 @@ and follow them.
   Python.
 * Pylint is good tool for helping with following code guidelines. It's very
   fussy though, so don't get too worked up about following its suggestions.
+  
+### Python modules
+
+* Make sure builds and tests work with only GNU Radio required components.
+  Mostly, this implies to only rely on `NumPy`.
+  Otherwise issues related to missing modules pop up repeatedly on the issue tracker.
+* Always keep in mind that modules like `SciPy` and `matplotlib` are optional.
+  If such a module is used without checking availability first, this will break
+  things for at least some users.
+
 
 ## Revision Control Guidelines
 
