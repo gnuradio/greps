@@ -112,6 +112,16 @@ and follow them.
 * Pylint is good tool for helping with following code guidelines. It's very
   fussy though, so don't get too worked up about following its suggestions.
 
+### Python modules
+
+* Only use non-core Python modules if they are already listed as dependencies
+  for GNU Radio. Mostly, this implies to only rely on `NumPy` and core Python
+  libraries. Otherwise, issues related to missing modules pop up repeatedly on
+  the issue tracker.
+* Always keep in mind that modules like `SciPy` and `matplotlib` are optional.
+  If such a module is used without checking availability first, this will break
+  things for at least some users.
+
 ## Revision Control Guidelines
 
 * In this repository, we almost always use fast-forward merges, and no merge
