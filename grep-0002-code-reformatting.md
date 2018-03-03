@@ -64,4 +64,4 @@ This GREP proposes to perform a full codebase reformatting according to standard
 
 To have sufficient diversity in the discussion about crafting a `.clang-format` at least 3 developers should be part of creating it and further tools to format the GNU Radio source tree.
 
-Further on each pull-request and patch as to be formatted using the tools in the GNU Radio source tree before it can be merged.
+Further on each pull-request and patch has to be formatted using the tools in the GNU Radio source tree before it can be merged.
