@@ -78,12 +78,12 @@ and follow them.
   will be able to confirm this. (Note: C++11 features are available starting
   with GNU Radio version 3.8).
 
-#### Code Style Guidelines
+#### Code Formatting Guidelines
 * Use the [LLVM code formatting guide](https://llvm.org/docs/CodingStandards.html#source-code-formatting). Following points will specify differences to it and highlight important points.
 * Do not indent namespaces
 * Use 4 spaces indentation width for new code.
 * Use spaces instead of tabs. If extending an existing file stick with the given indentation level. Do _not_ reindent a whole file and indent code consistently.
-* Before checking in code use tools in the code tree to sanitze your patches
+* Before checking in code use tools available in the source tree to sanitize your patches
 * Use Doxygen doc-blocks copiously. This makes it easier to maintain
   auto-generated documentation.
 * Include include files in the following order: Local headers, other GNU Radio
