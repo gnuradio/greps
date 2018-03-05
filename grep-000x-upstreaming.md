@@ -1,17 +1,17 @@
-# GRIPE 0002 -- Upstreaming Process
+# GREP [XXXX] -- Upstreaming Process
 
 
-- Original Author: Marcus Müller <marcus@hostalia.de>
-- Champion: Marcus Müller <marcus@hostalia.de>
-- Status: Draft 
+- Original Author: Marcus Müller <mmueller@gnuradio.org>
+- Champion: Marcus Müller <mmueller@gnuradio.org>
+- Status: Draft
 
 History:
 - 15-Feb-2017: Initial Draft
-
+- 05-Mar-2018: Conversion to GREP process
 
 ## Abstract
 
-This GRIPE strives to establish a guideline for 
+This GREP+ strives to establish a guideline for
 
 * when to submit blocks for becoming part of the upstream GNU Radio tree and
 * how to ensure maintenance and maintainability
@@ -63,7 +63,7 @@ Radio's main tree.
 If a change goes deep and changes behavior of the runtime / scheduler, this
 document does NOT describe the proper way of improving GNU Radio. GNU Radio is a
 very community-driven project. Complex changes are best discussed on the mailing
-list.
+list, and especially in the form of GREPs.
 
 This document does not apply to bug fixes.
 
@@ -88,14 +88,17 @@ Runtime, and keep it there.
 
 #### Legal Criteria
 
-TODO 
+The Copyright Requirements of the GNU Radio Project have to be met. That means,
+at this time, that the author of code needs to assign copyright to the FSF.
 
-#### High reusability
+#### High Reusability
 
 * I.e. implementations of specific standards are NOT ELIGIBLE for upstreaming
 * Basic math operations are ELIGIBLE
 * Widely adopted algorithms are ELIGIBLE
-* Additions / Modifications to the overall operation of GNU Radio and its runtime / scheduler are ELIGIBLE
+* Adapters to commonly used external tools are ELIGIBLE
+* Additions / Modifications to the overall operation of GNU Radio and its
+  runtime / scheduler are ELIGIBLE
 
 Here, subjective judgment of the maintainers is especially relevant and can
 overrule any concern given above or in the community.
@@ -105,8 +108,8 @@ off in an out-of-tree module.
 
 #### Code Quality / Maintainability
 
-Gripe 0001 applies without any restriction. Objective is to make new code stand
-out in quality.
+GREP0001 (Coding Guidelines) applies without any restriction. Objective is to
+make new code stand out in quality.
 
 The community strives to maintain reference to an official tool to check patches
 for conformity to coding style guidelines (compare checkpatch of the Linux
