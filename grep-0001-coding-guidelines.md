@@ -3,10 +3,11 @@
 - Original Author: Martin Braun <martin@gnuradio.org>,
                    Marcus Müller <mmueller@gnuradio.org>
 - Champion: Marcus Müller <mmueller@gnuradio.org>
-- Status: Draft
+- Status: Active
 
 History:
 - 12-Feb-2018: Initial Draft
+- 6-May-2018: Cleanup, turned active
 
 ## Abstract
 
@@ -49,20 +50,21 @@ and follow them.
 ### General Formatting Guidelines
 
 * Never submit code with trailing whitespace.
-* Try and keep line lengths to 79 characters, unless readability suffers. We
-  often have to do fun things like SSH into machines and edit code in a
-  terminal, and do side-by-side views of code on small-ish screens, so this is
-  actually pretty helpful.
+* Try and keep line lengths short, unless readability suffers. We often have to
+  do fun things like SSH into machines and edit code in a terminal, and do
+  side-by-side views of code on small-ish screens, so this is actually pretty
+  helpful. Maximum line length is 100 characters, but keeping lines below 80
+  characters where sensible is a good guideline.
 * Always end a file with a newline.
 
 ### C++-specific Guidelines
 
-* If in doubt, consult the [C++ Core Guidelines][https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md].
+#### Implementation Guidelines
+
+* If in doubt, consult the [C++ Core Guidelines](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md).
   If the guidelines have an answer, and it works for you, just pick that.
   Rationale: Many things are subjective and it's a waste of energy discussing
   those.
-* Use Doxygen doc-blocks copiously. This makes it easier to maintain
-  auto-generated documentation.
 * All things equal, prefer standard C++ constructs over Boost constructs (see
   also Boost guidelines). Rationale: Boost is a 3rd party dependency, and we
   want to keep those at a minimum. Also, Boost regularly makes
@@ -73,6 +75,24 @@ and follow them.
   can thus be optimized better at compile time. In many cases, lambdas are
   also more readable than the `bind` calls, which have add their own
   syntactical idiosyncrasies (such as the `_1` argument etc.).
+* Feel free to use modern C/C++ features even if they were not used before.
+  Make sure they work with the compilers and dependencies which are set for the
+  version of GNU Radio the commit will be made upon. The GNU Radio CI system
+  will be able to confirm this. (Note: C++11 features are available starting
+  with GNU Radio version 3.8).
+
+#### Code Formatting Guidelines
+
+* Use the `.clang-format` file provided with the source tree. The following
+  items describe some of the major formatting rules.
+* Do not indent namespaces
+* Use 4 spaces indentation width for new code.
+* Use spaces instead of tabs. If extending an existing file stick with the given
+  indentation level. Do _not_ reindent a whole file and indent code consistently.
+* Before checking in code use tools available in the source tree to sanitize
+  your patches
+* Use Doxygen doc-blocks copiously. This makes it easier to maintain
+  auto-generated documentation.
 * Include include files in the following order: Local headers, other GNU Radio
   headers, 3rd-party library headers, Boost headers, standard headers.
   The rationale is to include from most to least specific. This is the best way
@@ -89,14 +109,8 @@ and follow them.
 #include <mutex>
 ```
 
-* Feel free to use modern C/C++ features even if they were not used before.
-  Make sure they work with the compilers and dependencies which are set for the
-  version of GNU Radio the commit will be made upon. The GNU Radio CI system
-  will be able to confirm this. (Note: C++11 features are available starting
-  with GNU Radio version 3.8).
 
-
-## Boost-specific Guidelines
+#### Boost-specific Guidelines
 
 * Avoid Boost where possible (see C++ guidelines for rationale).
 * Don't use Boost's sleep functions. Prefer `std::chrono` functions.
