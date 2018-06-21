@@ -5,10 +5,11 @@ authoring a new GREP]
 
 - Original Author: Martin Braun <martin@gnuradio.org>
 - Champion: Martin Braun <martin@gnuradio.org>
-- Status: Draft
+- Status: Active
 
 History:
 - 5-May-2018: Initial Draft
+- 21-June-2018: Activated, first conversions merged
 
 ## Abstract
 
@@ -24,7 +25,7 @@ use the Boost Unit Testing Framework (UTF) instead.
 ## Copyright / License
 
 This GREP is licensed as CC-BY-ND.
-Copyright 2016 The GNU Radio Foundation.
+Copyright 2018 The GNU Radio Foundation.
 
 ## Motivation
 
