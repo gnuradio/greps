@@ -1,4 +1,4 @@
-# GREP 0011 -- Replace CppUnit with Boost Unit Testing Framework
+# GREP 0012 -- Replace CppUnit with Boost Unit Testing Framework
 
 [Note: All parts in square brackets are meant to be replaced as part of
 authoring a new GREP]
