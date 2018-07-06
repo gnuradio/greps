@@ -45,7 +45,7 @@ The following files shall be removed:
 - gr-blocks: `bin_statistics` block.
   - Alternative: Replace this block with one that uses actual message passing
 - gr-digital: `framer_sink` and `packet_sink` blocks
-  - Alternative: Replace these blocks with ones that uses actual message passing
+  - Alternative: Replace these blocks with ones that use actual message passing
 - gr-digital: `pkt.py` and various Python examples
 - gr-digital: Legacy OFDM blocks
 - gr-uhd: Replace async message source block with one that uses actual message
