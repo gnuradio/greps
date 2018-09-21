@@ -2,10 +2,12 @@
 
 - Original Author: Andrej Rode <mail@andrejro.de>
 - Champion: Andrej Rode <mail@andrejro.de>
-- Status: Draft
+- Status: Complete
 
 History:
 - 02-Mar-2018: Initial Draft
+- 29-Aug-2018: Acceptance into the `next` feature branch for 3.8
+- 21-Sep-2018: Merge into `master` - Complete
 
 ## Abstract
 
