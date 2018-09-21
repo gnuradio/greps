@@ -5,11 +5,13 @@ authoring a new GREP]
 
 - Original Author: Martin Braun <martin@gnuradio.org>
 - Champion: Martin Braun <martin@gnuradio.org>
-- Status: Active
+- Status: Completed
 
 History:
 - 5-May-2018: Initial Draft
 - 21-June-2018: Activated, first conversions merged
+- 20-Sep-2018: next is merged into master, finally removing all references to
+  cppunit
 
 ## Abstract
 
