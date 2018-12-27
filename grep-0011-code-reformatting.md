@@ -1,11 +1,13 @@
 # GREP 0011 -- Code Reformatting
 
 - Original Author: Andrej Rode <mail@andrejro.de>
+- Champion: Andrej Rode <mail@andrejro.de>
 - Status: Active
 
 History:
 - 02-Mar-2018: Initial Draft
 - 06-May-2018: Cleanup and made active
+- 27-Dec-2018: Added decision that was made to do a mega-commit before 3.8
 
 ## Abstract
 
@@ -24,6 +26,9 @@ implemented.
 
 Both projects reformatted the full source tree at once to reduce cleanup noise.
 
+**Addendum:** The GNU Radio leadership has decided to apply one reformatting
+mega-commit before the tagging of release 3.8.0.0.
+
 ## Copyright / License
 
 This work is licensed under a Creative Commons Attribution-ShareAlike 4.0
@@ -33,8 +38,8 @@ International License.
 
 Cleaning up the GNU Radio codebase will help current and future contributors to understand code in the
 GNU Radio source tree more quickly and will help speed up development.
-Also having a clean formatted codebase will allow the maintainers and developers to use automated tools
-for reviewing changes. The way to achieve a clean codebase might be not clear.
+Also, having a clean formatted codebase will allow maintainers and developers
+to use automated tools for reviewing changes.
 
 ## Description
 
@@ -58,6 +63,11 @@ result in files being consistent after they have been edited.
 During a time of low development (low count of pull requests and feature
 branches) apply a reformatting across the full source tree.
 This will result in a fully cleaned source tree.
+
+**Addendum:** The GNU Radio leadership team has decided to go ahead with method
+3 (i.e., apply a reformatting mega-commit). As of December 2018, the GNU Radio
+repository has tools in place to ease the rebasing of previously written pull
+requests.
 
 ### Comparison
 
@@ -95,18 +105,23 @@ the GNU Radio source tree.
 Further on each pull-request and patch has to be formatted using the tools in
 the GNU Radio source tree before it can be merged.
 
+**Addendum:** GREP 0001 has been finalized, and Method 3 will indeed be the
+weapon of choice.
+
 ### Timeline
 
-The specific time when the reformatting commit is applied will be decided by
-the GNU Radio master branch maintainer. However, the following items have to
-be taken care of beforehand:
+As of the first draft of this GREP, there were still multiple branches of GNU
+Radio (`next`, `python3`, etc.) which all had to be merged. In September 2018,
+all branches were finally merged into the `master` branch, enabling the
+finalization of the reformatting effort.
 
-- The `next` branch needs to be merged into master for the 3.8 release
-- A final `.clang-format` file needs to be merged into the master branch
+In December 2018, the final touches to the clang-format file and accompanying
+tools were applied. In a separate effort, the path towards a 3.8 release was
+decided. The GNU Radio leadership team thus decided to apply one big
+reformatting mega-commit to all C++ code shortly before the finalization of the
+3.8.0.0 release of GNU Radio. The exact point in time will be determined once
+the first release candidate of GNU Radio is ready to be tagged by the
+maintainer.
 
-After that, the maintainer picks a point in time and the champion of this GREP
-applies the reformatting in one big commit.
-
-Other branches may also choose to apply the formatting as one big commit, e.g.,
-in order to ease backporting or cherry-picking of changes.
+The champion of this GREP will then apply the changes.
 
