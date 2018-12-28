@@ -37,3 +37,9 @@ wouldn't that be great. But maybe we can't. Let's find out.
 ## Description
 
 **To be written**. GREP14 (blocktool) would be a help.
+
+Options for a replacement:
+- Boost.Python with auto-generated files (blocktool could be useful here)
+- PyBind11 is similar to Boost.Python. It's header-only and could be shipped
+  with GNU Radio instead of making it a dependency. It would still require
+  auto-generated files as with Boost.Python.
