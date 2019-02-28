@@ -16,7 +16,7 @@ The goal of this GREP is to merge the existing out-of-tree (OOT) module gr-iio i
 ## Copyright / License
 
 This GREP is licensed as CC-BY-ND.
-Copyright 2018 The GNU Radio Foundation.
+Copyright 2019 Analog Devices, Inc.
 
 ## Motivation
 
