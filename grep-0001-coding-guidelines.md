@@ -123,12 +123,31 @@ which of the things being assigned to persist outside of the block.
 
 - All class static data members shall begin with s_`foo`.
 - Each significant class shall be contained in its own file.
+- Prefer non-static data member initialization (NSDMI) where possible
 
 
 #### Boost-specific Guidelines
 
 * Avoid Boost where possible (see C++ guidelines for rationale).
 * Don't use Boost's sleep functions. Prefer `std::chrono` functions.
+
+#### On the usage of clang-format
+
+`clang-format` is a command line tool that can directly be applied to any file
+by running
+
+    clang-format -i $filename
+
+However, the recommended way of using clang-format is either to integrate it
+into your editor of choice (most popular editors have clang-format integration,
+see also https://clang.llvm.org/docs/ClangFormat.html), or to enable a git
+pre-commit hook (See https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks
+for git hooks; there are different ways to configure a pre-commit hook for
+clang-format and examples can be found all over the internet) which will verify
+that all code that is being committed has been correctly formatted, or both.
+By correctly formatting code before submitting it upstream as a patch or pull
+request, you will save both yourself and the maintainers of GNU Radio some time,
+so please use these tools to decrease the workload on everyone involved.
 
 ## Python-specific Guidelines
 
