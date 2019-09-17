@@ -2,12 +2,13 @@
 
 - Original Author: Andrej Rode <mail@andrejro.de>
 - Champion: Andrej Rode <mail@andrejro.de>
-- Status: Active
+- Status: Final
 
 History:
 - 02-Mar-2018: Initial Draft
 - 06-May-2018: Cleanup and made active
 - 27-Dec-2018: Added decision that was made to do a mega-commit before 3.8
+- 17-Sep-2019: The clang-formatting has been applied to all active branches.
 
 ## Abstract
 
@@ -123,5 +124,8 @@ reformatting mega-commit to all C++ code shortly before the finalization of the
 the first release candidate of GNU Radio is ready to be tagged by the
 maintainer.
 
-The champion of this GREP will then apply the changes.
+In 2019, as part of releasing 3.8.0.0, the clang-format codebase was applied
+before tagging the release and thus was applied to both master branch and
+maint-3.8. The formatting was backported to maint-3.7 in September 2019 to allow
+backporting fixes to said branch.
 
