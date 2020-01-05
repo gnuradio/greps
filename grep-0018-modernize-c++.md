@@ -69,7 +69,7 @@ at all, which:
 
 Other raw pointers do need to remain dynamic since changing them
 requires instantiating a new object
-([example][raw-pointer-to-std]). They should be changed to std smart
+([example][raw-pointer-to-std]). They should be changed to `std` smart
 pointers, or even more preferably the objects should be movable and be
 changed that way. For objects where copies are cheap it's enough to be
 able to copy.
@@ -80,7 +80,7 @@ be changed to `std::vector` or `volk::vector`.
 
 Recommendation:
 * Allow 3.9 release to break ABI by changing raw and Boost pointers to
-  std and non-pointers even in public interfaces.
+  `std` and non-pointers even in public interfaces.
 
 ### Delete copy constructor / copy assignment
 
@@ -112,7 +112,7 @@ smart pointers. The only thing missing in C++11 (which arrived in
 C++14) is `std::make_unique()`. Until C++14 is required for GNU Radio
 that gap can be filled by `boost::make_unique()`.
 
-Benefits of switching to std:
+Benefits of switching to `std`:
 * readability for a larger population of developers
 * reduction of dependency on Boost.
 * more likely to we interoperable with third party libraries and OOT
@@ -179,6 +179,82 @@ away the constness.
 Recommendation:
 * Change them where they make sense, but don't have as a goal to
   eliminate C style casts where they seem right
+
+### De-boostify
+
+There's a lot of Boost in GNU Radio. Some have replacements in C++11
+(e.g. `boost::to_string`), others don't (e.g. `std::filesystem` is
+C++17).
+
+Some uses of a Boost feature may drag others in. E.g. the lock
+situation described above. Others are self-contained.
+
+Quick survey inventory of boost:
+
+```
+$ egrep -r 'boost::[a-z_A-Z0-9]+' . | sed -nr 's,.*(boost::[a-zA-Z0-9_]+).*,\1,p' | sort | uniq -c | sort -rn
+    555 boost::shared_ptr
+    198 boost::format
+    107 boost::asio
+     97 boost::bind
+     34 boost::mutex
+     32 boost::posix_time
+     25 boost::any
+     19 boost::thread
+     17 boost::system
+     16 boost::dynamic_pointer_cast
+     13 boost::math
+     12 boost::filesystem
+      9 boost::uint32_t
+      9 boost::this_thread
+      9 boost::shared_mutex
+      9 boost::condition_variable
+      7 boost::lexical_cast
+      7 boost::get_system_time
+      7 boost::enable_shared_from_this
+      7 boost::any_cast
+      6 boost::make_unique
+      5 boost::noncopyable
+      4 boost::system_time
+      4 boost::str
+      4 boost::recursive_mutex
+      4 boost::program_options
+      4 boost::crc_optimal
+      3 boost::xpressive
+      3 boost::weak_ptr
+      3 boost::scoped_ptr
+      3 boost::make_shared
+      3 boost::lockfree
+      3 boost::function
+      3 boost::dynamic_bitset
+      2 boost::to_string
+      2 boost::thread_interrupted
+      2 boost::shared_array
+      2 boost::scoped_array
+      2 boost::interprocess
+      2 boost::function0
+      2 boost::assign
+      1 boost::shared_sptr
+      1 boost::ptr_map
+      1 boost::lock_guard
+      1 boost::integer
+      1 boost::int64_t
+      1 boost::get_deleter
+      1 boost::barrier
+      1 boost::bad_lexical_cast
+      1 boost::bad_any_cast
+      1 boost::array
+```
+
+Recommendation:
+* Switch to `std` whereever and whenever possible, when it's not part
+  of the API.
+* Don't switch half way for API-visible changes. E.g. if one module
+  needs a feature of `boost::x` not yet in `std`, but another is fine
+  either way, then don't change either of them. Specifically this
+  applies to mutexes, described above.
+* API-breaking changes are fine before releasing a new minor version,
+  as long as they are switched all the way.
 
 [trigger-points]: https://www.boost.org/doc/libs/1_67_0/doc/html/thread/thread_management.html#thread.thread_management.tutorial.interruption.predefined_interruption_points
 [raw-pointer-to-obj]: https://github.com/gnuradio/gnuradio/pull/2970/commits/d76c2ffdf20e1076eafd5aba83728548c59bfc69
