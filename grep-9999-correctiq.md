@@ -9,8 +9,8 @@ History:
 
 ## Abstract
 
-The DC spike created by the IQ sampling process has long plagued some SDRs.  
-Software such as GQRX and SDRSharp have built-in algorithms that can be enabled 
+The DC spike created by the IQ sampling process has long been an issue with the sampling 
+process. Software such as GQRX and SDRSharp have built-in algorithms that can be enabled 
 to remove this artifact.  However, GNU Radio has no built-in blocks to address 
 this feature.  A second related feature common in receiver software is the ability 
 to correct for inverted spectrum.  The gr-correctiq OOT module provides blocks that 
@@ -26,7 +26,7 @@ may need to, but other than that CC-BY-ND sounds fine.]
 ## Motivation
 
 When I first stared with SDR, the DC spike inherent in my first few projects with 
-GNU Radio actually turned me away because I didn't know how to fix it correctly.  
+GNU Radio actually turned me away because I didn't know how to fix it correctly. 
 I'm sure many others, experienced and new, run into the same issue with DC spikes 
 and inverted spectra.  Having drag-and-drop native blocks to address it would make it 
 a trivial problem to address even for novice users.
@@ -35,7 +35,7 @@ a trivial problem to address even for novice users.
 
 There are 4 key modules in gr-correctiq:
 
-1. CorrectIQ - This block behaves like the algorithms in tools such as GQRX and SDRSharp.  
+1. CorrectIQ - This block behaves like the algorithms in tools such as GQRX and SDRSharp. 
 It continuously evaluates the stream (basically an IIR filter) that removes the DC spike.
 2. CorrectIQ AutoSync Offset - This block behaves like the core CorrectIQ block, however 
 a learning period limits the time impact of the IIR effect.  So it will "train" for n 
