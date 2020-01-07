@@ -47,7 +47,10 @@ and Q static offsets.
 or inverting the complex would invert the spectrum, a true swap seemed the most preserving 
 of the original data.
 
-Currently they're in a CORRECTIQ group.  If integrated, they should be moved into an 
+### Notes
+
+1. There are no other dependencies other than GNU Radio to build these blocks.
+2. Currently they're in a CORRECTIQ group.  If integrated, they should be moved into an 
 appropriate standard group as well.
 
 
