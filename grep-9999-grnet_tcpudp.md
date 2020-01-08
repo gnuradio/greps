@@ -42,3 +42,7 @@ In testing, the TCP source relying on boost dropped packets.  This wasn't notice
 attempts to pump compressed blocks through it.  As a result, the 4th block (TCP Source) is 
 recommended to maintain the existing TCP Source block for the most reliable performance.
 
+The UDP blocks have been tested at full-speed on the Allen Telescope Array data streams with 
+very good performance.  The blocks also support jumbo frames and a variety of header formats
+(or straight raw data).
+
