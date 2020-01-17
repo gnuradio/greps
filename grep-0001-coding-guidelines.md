@@ -109,6 +109,20 @@ and follow them.
 #include <mutex>
 ```
 
+* Macros and constant values (e.g., enumerated values, static const int FOO=23)
+  shall be in `UPPER_CASE`.
+* All other identifiers are in STL style, using underscores (e.g., `get_x_value()`).
+
+#### Classes
+
+- All class data members shall begin with d_`foo`
+
+The big benefit is when you're staring at a block of code it's obvious
+which of the things being assigned to persist outside of the block.
+
+- All class static data members shall begin with s_`foo`.
+- Each significant class shall be contained in its own file.
+
 
 #### Boost-specific Guidelines
 
@@ -177,3 +191,12 @@ and follow them.
 * Remember that we create git repositories, not just code. This means every
   commit is part of our project and should be treated as such.
 
+
+## Comments
+
+* When working in code, there may be additions or things you might not know how
+  to do just yet. It is appropriate in these instances to make a comment about
+  it. The convention for this is to use the following keywords to indicate where
+  you have left something for later:
+  * Use TODO comments for low-priority fixes
+  * Use FIXME comments for high-priority fixes
