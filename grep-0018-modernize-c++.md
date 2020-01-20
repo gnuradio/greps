@@ -5,7 +5,7 @@
 - Status: Draft
 
 History:
-- 05-Jan-2020: Initial Draft
+- 20-Jan-2020: Initial Draft
 
 ## Abstract
 
@@ -31,6 +31,11 @@ The legacy patterns this GREP lays out a plan for making the code base:
 
 ## Description
 
+### Open questions
+
+* What level of ABI guarantee does GNU Radio make between and within
+  minor releases?
+
 ### More const
 
 Benefits:
@@ -42,8 +47,10 @@ Benefits:
 Recommendation:
 * private members and other `_impl.xx` code should be free to change
   at any time to add const
-* adding const to exposed interfaces can be done before a minor
-  release
+* adding const to exposed interfaces can be done between minor
+  releases
+
+Risks: none.
 
 ### More constexpr
 
@@ -55,6 +62,8 @@ Benefits over const:
 * enables compiler optimizations
 
 Recommendation: See "More const", above
+
+Risks: none.
 
 ### Depointerization
 
@@ -82,6 +91,8 @@ Recommendation:
 * Allow 3.9 release to break ABI by changing raw and Boost pointers to
   `std` and non-pointers even in public interfaces.
 
+Risks: none.
+
 ### Delete copy constructor / copy assignment
 
 Where classes are not copyable (e.g. contain a pointer), the copy
@@ -105,6 +116,8 @@ Recommendation:
   interface: break OOT builds by deleting copy constructor & copy
   assignment. It's better to break at build time than runtime.
 
+Risks: none.
+
 ### Boost smart pointers
 
 Boost smart pointers currently provide no extra benefit over C++11
@@ -120,6 +133,8 @@ Benefits of switching to `std`:
 
 Recommendation:
 * Merge [PR 2974][PR2974], breaking ABI before 3.9 release.
+
+Risks: none.
 
 ### Boost locks & threads
 
@@ -159,6 +174,8 @@ sizeof(gr_complex)` was intended.
 Recommendation:
 * Replace all feasible uses of `volk_malloc` et al with `volk::vector`
 
+Risks: master branch already depends on `volk::vector`, so none.
+
 ### `xxx_cast<>`
 
 `static_cast<>` and friends are safer than C style casts, but more
@@ -179,6 +196,142 @@ away the constness.
 Recommendation:
 * Change them where they make sense, but don't have as a goal to
   eliminate C style casts where they seem right
+
+Risks: none
+
+### `static_assert`
+
+There are many uses of `assert()` (runtime check) that should be
+`static_assert` (compile time check).
+
+Example:
+
+```c++
+assert(sizeof(fftwf_complex) == sizeof(gr_complex))
+```
+
+Risks: none
+
+### Declaration initializers
+
+Pre-C++11 there were only two ways to initialize values, both in the
+constructor:
+
+```c++
+class obj {
+  int d_a, d_b, d_c;
+  std::string d_s;
+public:
+  obj(int a)
+    : d_a(a),
+      d_b(0),
+      d_s()   // Completely unnecessary
+  {
+      d_c = 3;
+  }
+  obj(int a, int b)
+    : d_a(a), d_b(b)  // Repeated init of d_a.
+  {
+      d_c = 3; // Repeated init of d_c;
+  }
+};
+```
+
+This causes code duplication.
+
+In C++11 default values can be set at declaration time (normally in
+header files):
+
+```c++
+class obj {
+  int d_a = 0;   // Or int d_a{0};
+  int d_b = 0;
+  int d_c = 3;
+public:
+  obj(int a)
+    : d_a(a)
+  {
+  }
+  obj(int a, int b):
+    : d_a(a), d_b(b)    // Duplication of d_a(a).
+  {
+  }
+};
+```
+
+To completely avoid duplication one constructor can call another:
+
+```c++
+class obj {
+  int d_a = 0;   // Or int d_a{0};
+  int d_b = 0;
+  int d_c = 3;
+public:
+  obj(int a)
+    : d_a(a)
+  {
+  }
+  obj(int a, int b)
+    : obj(a) // Call the other constructor.
+  {
+    d_b = b; // Can't be put in construct initializer when
+             // construction delegation is used.
+  }
+};
+```
+
+Recommendation:
+
+* Don't use constructor delegation with a non-empty body. It's
+  semantically unclear what it means when object is constructed, but a
+  constructor is still running.
+* Avoid initializing inside the constructor body, especially when it
+  prevents a member being const.
+* Don't needlessly list member variables for their default constructor
+  (`d_s`, above)
+* Use declaration initialization for default values. It's the least
+  repetition in the face of multiple constructors.
+
+Risk: This change does not affect API, so none.
+
+### `enum class`
+
+Convert all `enum` to type-safe `enum class`.
+
+Recommendation:
+* Internal enums can be changed freely at any time
+* enums part of API can be changed between minor releases.
+
+Risks: none
+
+## Loops
+
+Use the appropriate algorithm, when possible, instead of a raw for
+loop (not C++11-specific).
+
+If not possible, use range based for loops, with `auto&` or `const
+auto&`.
+
+```c++
+std::copy(from_vector.begin(), from_vector.end(),
+          std::back_inserter(to_vector));
+for (const auto& t : container) {
+  […]
+}
+```
+
+Risks: none
+
+### `override`
+
+Add `override` when a virtual is overridden. This prevents surprising
+bugs.
+
+### Pointer values `NULL`, `0`, `nullptr`
+
+Use `nullptr`. Improves readability and some type safety.
+
+Risks: none
 
 ### De-boostify
 
@@ -255,6 +408,8 @@ Recommendation:
   applies to mutexes, described above.
 * API-breaking changes are fine before releasing a new minor version,
   as long as they are switched all the way.
+
+Risks: none
 
 [trigger-points]: https://www.boost.org/doc/libs/1_67_0/doc/html/thread/thread_management.html#thread.thread_management.tutorial.interruption.predefined_interruption_points
 [raw-pointer-to-obj]: https://github.com/gnuradio/gnuradio/pull/2970/commits/d76c2ffdf20e1076eafd5aba83728548c59bfc69
