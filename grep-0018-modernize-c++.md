@@ -212,7 +212,7 @@ assert(sizeof(fftwf_complex) == sizeof(gr_complex))
 
 Risks: none
 
-### Declaration initializers
+### Default member initialization
 
 Pre-C++11 there were only two ways to initialize values, both in the
 constructor:
@@ -239,8 +239,8 @@ public:
 
 This causes code duplication.
 
-In C++11 default values can be set at declaration time (normally in
-header files):
+In C++11 default member values can be set at declaration time
+(normally in header files):
 
 ```c++
 class obj {
