@@ -15,28 +15,32 @@ some other pattern of non-idiomatic C++.
 This GREP lays out how to get from here to there with minimal
 breaking.
 
+All changes proposed here are aimed at at being done between minor versions
+(e.g. before 3.9), so minor API changes (e.g. adding `const`, scoping `enum
+class` values) are OK.
+
 ## Copyright / License
 
 This GREP is licensed as CC-BY-ND. Copyright 2020 Google Inc.
 
 ## Motivation
 
-Cleaning up whole patterns of the code 
+Cleaning up whole patterns of the code.
 
 The legacy patterns this GREP lays out a plan for making the code base:
 
 * more readable: standard components, less code, and explicit const
 * safer: less manual memory management, prevent inherently broken copy
 * faster: fewer pointer indirections, more information to the compiler
+* less dependent on boost: To one day not require boost, which is sometimes a
+  language on its own
 
 ## Description
 
-### Open questions
+### Add `const` where appropriate
 
-* What level of ABI guarantee does GNU Radio make between and within
-  minor releases?
-
-### More const
+This is not new with C++11, but `const` use could be better in the GNU Radio
+code base.
 
 Benefits:
 * more readable; even in a function reader can see that a name has a
@@ -45,14 +49,15 @@ Benefits:
 * possibly allows compiler optimizations
 
 Recommendation:
-* private members and other `_impl.xx` code should be free to change
-  at any time to add const
-* adding const to exposed interfaces can be done between minor
-  releases
+* add `const` to large scope variables (e.g. member variables) when appropriate
+* new code can have `const` for small scope (temporary) variables, but don't go
+  back and change old code
+* "large" and "small" scope border line is subjective, but 3 lines is small,
+  member variable (indefinite time scope) is large
 
-Risks: none.
+Risks: none
 
-### More constexpr
+### More `constexpr`
 
 `constexpr` guarantees compile time evaluation.
 
@@ -61,7 +66,7 @@ Benefits over const:
 * can be used in some places where const can't
 * enables compiler optimizations
 
-Recommendation: See "More const", above
+Recommendation: Same as for `const`, see above.
 
 Risks: none.
 
@@ -83,13 +88,13 @@ pointers, or even more preferably the objects should be movable and be
 changed that way. For objects where copies are cheap it's enough to be
 able to copy.
 
-Another class of raw pointers is arrays, which sometimes require
-volk-specific allocation. Now that `volk::vector` exists these can all
-be changed to `std::vector` or `volk::vector`.
+Another class of raw pointers is [arrays that should be changed to
+`std::vector<>`][raw-pointer-to-vector]. If they require volk-specific
+allocations they should use `volk::vector`.
 
 Recommendation:
-* Allow 3.9 release to break ABI by changing raw and Boost pointers to
-  `std` and non-pointers even in public interfaces.
+* switch all uses of needless pointers to pure objects
+* for arrays, switch to `std::vector<>` or `volk::vector`.
 
 Risks: none.
 
@@ -103,27 +108,25 @@ constructor and copy assignment operator should be deleted.
   foo& operator(const foo&) = delete;
 ```
 
-This should be added even if the class has a `std::unique_ptr` member
-variable, since it may be changed to `std::shared_ptr` in the future.
-(TODO: opinions? how likely is that?)
-
 Recommendation:
-* Before minor version release, do this as much as possible
-* Where uncopyability is exposed in a released version and can be
-  fixed: make the object copyable. It's less efficient, but fixes
-  runtime behavior without breaking OOT builds.
-* Where uncopyability is inherent in a released version to the exposed
-  interface: break OOT builds by deleting copy constructor & copy
-  assignment. It's better to break at build time than runtime.
+* delete copy constructor / copy assignment when copying object is always a
+  mistake (e.g. object is a singleton, or very expensive to copy and never
+  should be)
+* make object copyable/movable if copying the object is fine. E.g. replace all
+  member pointers by smart pointers (converting raw pointer to `std::unique_ptr`
+  correctly automatically prevents copy, but allows move)
+* if making the object copyable is not feasible at this time, delete the copy
+  constructor/assignment to prevent accidental copies
 
 Risks: none.
 
 ### Boost smart pointers
 
-Boost smart pointers currently provide no extra benefit over C++11
-smart pointers. The only thing missing in C++11 (which arrived in
-C++14) is `std::make_unique()`. Until C++14 is required for GNU Radio
-that gap can be filled by `boost::make_unique()`.
+Boost smart pointers currently provide no extra benefit over C++11 smart
+pointers. The only thing missing in C++11 (which arrived in C++14) is
+`std::make_unique()`. Until C++14 is required for GNU Radio that gap can be
+filled by `gr::make_unique` which can start off being an alias for
+`boost::make_unique()`.
 
 Benefits of switching to `std`:
 * readability for a larger population of developers
@@ -132,7 +135,7 @@ Benefits of switching to `std`:
   blocks
 
 Recommendation:
-* Merge [PR 2974][PR2974], breaking ABI before 3.9 release.
+* Merge a change like [PR 2974][PR2974], breaking ABI before 3.9 release.
 
 Risks: none.
 
@@ -162,7 +165,8 @@ cancellation is big enough to be out of scope for this GREP, and will
 require a separate one.
 
 Recommendation:
-* Leave these for a future GREP
+* use `std` locks and threads in new code
+* leave existing boost ones ones alone, to be addressed by a future GREP
 
 ### `volk_malloc`
 
@@ -282,25 +286,32 @@ public:
 
 Recommendation:
 
-* Don't use constructor delegation with a non-empty body. It's
+* don't use constructor delegation with a non-empty body. It's
   semantically unclear what it means when object is constructed, but a
   constructor is still running.
-* Avoid initializing inside the constructor body, especially when it
-  prevents a member being const.
-* Don't needlessly list member variables for their default constructor
+  * no cases of this should exist in old code, as it's a C++11 feature
+* don't needlessly list member variables for their default constructor
   (`d_s`, above)
-* Use declaration initialization for default values. It's the least
-  repetition in the face of multiple constructors.
+  * remove existing cases of this, as they bloat the code
+* for future code use default member initialization for default values. It's the
+  least repetition in the face of multiple constructors, which the code may get
+  one day if not already
+  * don't change old code that uses constructor initialization, unless already
+    changing that bit of the code
+* for future code don't initialize inside the constructor body, especially when
+  it prevents a member being const
+  * for old code change to constructor initialization only if doing other
+    changes, or in order to make a member variable const
 
-Risk: This change does not affect API, so none.
+Risk: none
 
 ### `enum class`
 
-Convert all `enum` to type-safe `enum class`.
+Convert all `enum` to type-safe `enum class`. This is type safe and enables
+better compiler warnings for `switch` cases with missing states.
 
 Recommendation:
-* Internal enums can be changed freely at any time
-* enums part of API can be changed between minor releases.
+* change them all
 
 Risks: none
 
@@ -320,6 +331,13 @@ for (const auto& t : container) {
 }
 ```
 
+These loops are easier to get right, and easier to read, than the manual
+init-check-increment loops, and avoids working with tricky iterators directly.
+
+Recommendation:
+* change these in old code where it doesn't cause too much refactoring, unless
+  that refactoring is an improvement overall
+
 Risks: none
 
 ### `override`
@@ -327,9 +345,17 @@ Risks: none
 Add `override` when a virtual is overridden. This prevents surprising
 bugs.
 
+Recommendation:
+* batch fix old code
+
+Risks: none
+
 ### Pointer values `NULL`, `0`, `nullptr`
 
 Use `nullptr`. Improves readability and some type safety.
+
+Recommendation:
+* batch fix old code
 
 Risks: none
 
@@ -414,4 +440,5 @@ Risks: none
 [trigger-points]: https://www.boost.org/doc/libs/1_67_0/doc/html/thread/thread_management.html#thread.thread_management.tutorial.interruption.predefined_interruption_points
 [raw-pointer-to-obj]: https://github.com/gnuradio/gnuradio/pull/2970/commits/d76c2ffdf20e1076eafd5aba83728548c59bfc69
 [raw-pointer-to-std]: https://github.com/gnuradio/gnuradio/pull/2970/commits/9cb9ba9b62494a422c238bb387db0c038e6119bb
+[raw-pointer-to-vector]: https://github.com/gnuradio/gnuradio/pull/2970/commits/e51bde49e83b0535106e7a8f11605a81584b1ba3
 [PR2974]: https://github.com/gnuradio/gnuradio/pull/2974
