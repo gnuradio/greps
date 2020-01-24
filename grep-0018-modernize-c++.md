@@ -37,13 +37,36 @@ The legacy patterns this GREP lays out a plan for making the code base:
 
 ## Description
 
+### PR granularity
+
+Most changes to be made should be scoped to one type of change in one
+section. E.g. a PR with one commit saying:
+
+* `digital: Make all non-changing member variables const`
+* `dtv: De-pointer to remove manual memory management`
+* `audio: Replace all raw pointers with smart pointers`
+
+If the change is inherently multi-section, or (part of wide-spread interfaces),
+then instead expect PRs/commits like:
+
+* `Replace boost smart pointers with std ones`
+* `Replace assert with static_assert, where knowable at compile time`
+
+If a change is trickier (but still worth it), then use a finer granularity such
+as:
+
+* `blocks: Simplify foo processing in file_sink`
+
+These are guidelines for PR sizes for these changes. Common sense when a commit
+is "too big" or "could change the other thing too" still applies.
+
 ### Add `const` where appropriate
 
 This is not new with C++11, but `const` use could be better in the GNU Radio
 code base.
 
 Benefits:
-* more readable; even in a function reader can see that a name has a
+* more readable; even for local variables a reader can see that a name has a
   final value
 * avoids accidents
 * possibly allows compiler optimizations
@@ -61,14 +84,14 @@ Risks: none
 
 `constexpr` guarantees compile time evaluation.
 
-Benefits over const:
+Benefits over `const`:
 * no risk of initialization order breakage
 * can be used in some places where const can't
 * enables compiler optimizations
 
 Recommendation: Same as for `const`, see above.
 
-Risks: none.
+Risks: none
 
 ### Depointerization
 
@@ -95,8 +118,9 @@ allocations they should use `volk::vector`.
 Recommendation:
 * switch all uses of needless pointers to pure objects
 * for arrays, switch to `std::vector<>` or `volk::vector`.
+* where it has to be a pointer, switch to `std` smart pointers
 
-Risks: none.
+Risks: none
 
 ### Delete copy constructor / copy assignment
 
@@ -109,7 +133,7 @@ constructor and copy assignment operator should be deleted.
 ```
 
 Recommendation:
-* delete copy constructor / copy assignment when copying object is always a
+* delete copy constructor & copy assignment when copying object is always a
   mistake (e.g. object is a singleton, or very expensive to copy and never
   should be)
 * make object copyable/movable if copying the object is fine. E.g. replace all
@@ -118,7 +142,7 @@ Recommendation:
 * if making the object copyable is not feasible at this time, delete the copy
   constructor/assignment to prevent accidental copies
 
-Risks: none.
+Risks: none
 
 ### Boost smart pointers
 
@@ -137,7 +161,7 @@ Benefits of switching to `std`:
 Recommendation:
 * Merge a change like [PR 2974][PR2974], breaking ABI before 3.9 release.
 
-Risks: none.
+Risks: none
 
 ### Boost locks & threads
 
