@@ -112,6 +112,7 @@ and follow them.
 * Macros and constant values (e.g., enumerated values, static const int FOO=23)
   shall be in `UPPER_CASE`.
 * All other identifiers are in STL style, using underscores (e.g., `get_x_value()`).
+  Avoid using `CamelCase()`.
 
 #### Classes
 
