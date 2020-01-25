@@ -151,6 +151,12 @@ which of the things being assigned to persist outside of the block.
   If such a module is used without checking availability first, this will break
   things for at least some users.
 
+## CMake Files
+
+* The formatting guidelines also apply to CMakeLists.txt files
+* CMake commands are kept lowercase, while custom GNU Radio macros are kept in
+  uppercase. We treat CMake as if it were case-sensitive.
+
 ## Revision Control Guidelines
 
 * In this repository, we almost always use fast-forward merges, and no merge
