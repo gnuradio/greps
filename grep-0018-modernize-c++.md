@@ -13,7 +13,13 @@ As of early 2020 there is lots of pre-C++11 code in GNU Radio, and
 some other pattern of non-idiomatic C++.
 
 This GREP lays out how to get from here to there with minimal
-breaking.
+breaking. Modernizing the code will make the code:
+
+* more readable: standard components, less code, and explicit const
+* safer: less manual memory management, prevent inherently broken copy
+* faster: fewer pointer indirections, more information to the compiler
+* less dependent on boost: To one day not require boost, which is sometimes a
+  language on its own
 
 All changes proposed here are aimed at at being done between minor versions
 (e.g. before 3.9), so minor API changes (e.g. adding `const`, scoping `enum
@@ -128,8 +134,8 @@ Where classes are not copyable (e.g. contain a pointer), the copy
 constructor and copy assignment operator should be deleted.
 
 ```c++
-  foo(const foo&) = delete;
-  foo& operator(const foo&) = delete;
+    foo(const foo&) = delete;
+    foo& operator(const foo&) = delete;
 ```
 
 Recommendation:
@@ -213,9 +219,9 @@ A typical example is:
 
 ```c++
 […]
-  gr_vector_const_void_star& input_items,
+    gr_vector_const_void_star& input_items,
 […]
-  float* in = (float*)input_items[0];
+    float* in = (float*)input_items[0];
 ```
 
 which should be changed to use a `static_cast<>` in order to not cast
@@ -246,22 +252,21 @@ Pre-C++11 there were only two ways to initialize values, both in the
 constructor:
 
 ```c++
-class obj {
-  int d_a, d_b, d_c;
-  std::string d_s;
+class obj
+{
+private:
+    int d_a, d_b, d_c;
+    std::string d_s;
+
 public:
-  obj(int a)
-    : d_a(a),
-      d_b(0),
-      d_s()   // Completely unnecessary
-  {
-      d_c = 3;
-  }
-  obj(int a, int b)
-    : d_a(a), d_b(b)  // Repeated init of d_a.
-  {
-      d_c = 3; // Repeated init of d_c;
-  }
+    obj(int a) : d_a(a), d_b(0), d_s() // d_s() init is completely unnecessary
+    {
+        d_c = 3;
+    }
+    obj(int a, int b) : d_a(a), d_b(b) // Repeated init of d_a.
+    {
+        d_c = 3; // Repeated init of d_c;
+    }
 };
 ```
 
@@ -271,40 +276,36 @@ In C++11 default member values can be set at declaration time
 (normally in header files):
 
 ```c++
-class obj {
-  int d_a = 0;   // Or int d_a{0};
-  int d_b = 0;
-  int d_c = 3;
+class obj
+{
+    int d_a = 0; // Or int d_a{0};
+    int d_b = 0;
+    int d_c = 3;
+
 public:
-  obj(int a)
-    : d_a(a)
-  {
-  }
-  obj(int a, int b):
-    : d_a(a), d_b(b)    // Duplication of d_a(a).
-  {
-  }
+    obj(int a) : d_a(a) {}
+    obj(int a, int b) : d_a(a), d_b(b) // Duplication of d_a(a).
+    {
+    }
 };
 ```
 
 To completely avoid duplication one constructor can call another:
 
 ```c++
-class obj {
-  int d_a = 0;   // Or int d_a{0};
-  int d_b = 0;
-  int d_c = 3;
+class obj
+{
+    int d_a = 0; // Or int d_a{0};
+    int d_b = 0;
+    int d_c = 3;
+
 public:
-  obj(int a)
-    : d_a(a)
-  {
-  }
-  obj(int a, int b)
-    : obj(a) // Call the other constructor.
-  {
-    d_b = b; // Can't be put in construct initializer when
-             // construction delegation is used.
-  }
+    obj(int a) : d_a(a) {}
+    obj(int a, int b) : obj(a) // Call the other constructor.
+    {
+        d_b = b; // Can't be put in construct initializer when
+                 // construction delegation is used.
+    }
 };
 ```
 
@@ -335,7 +336,9 @@ Convert all `enum` to type-safe `enum class`. This is type safe and enables
 better compiler warnings for `switch` cases with missing states.
 
 Recommendation:
-* change them all
+* internal enums: change them
+* enums part of API: new enums should all be `enum class`, but leave
+  existing ones alone
 
 Risks: none
 
@@ -351,7 +354,7 @@ auto&`.
 std::copy(from_vector.begin(), from_vector.end(),
           std::back_inserter(to_vector));
 for (const auto& t : container) {
-  […]
+    […]
 }
 ```
 
