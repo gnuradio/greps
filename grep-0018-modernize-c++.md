@@ -21,9 +21,9 @@ breaking. Modernizing the code will make the code:
 * less dependent on boost: To one day not require boost, which is sometimes a
   language on its own
 
-All changes proposed here are aimed at at being done between minor versions
-(e.g. before 3.9), so minor API changes (e.g. adding `const`, scoping `enum
-class` values) are OK.
+All changes proposed here are aimed at at being done between major
+versions (e.g. between 3.8 and 3.9), so minor API changes (e.g. adding
+`const`, scoping `enum class` values) are OK.
 
 ## Copyright / License
 
@@ -52,8 +52,9 @@ section. E.g. a PR with one commit saying:
 * `dtv: De-pointer to remove manual memory management`
 * `audio: Replace all raw pointers with smart pointers`
 
-If the change is inherently multi-section, or (part of wide-spread interfaces),
-then instead expect PRs/commits like:
+If the change is inherently multi-section, part of wide-spread
+interfaces, or a very minor change repeated many times, then instead
+expect PRs/commits like:
 
 * `Replace boost smart pointers with std ones`
 * `Replace assert with static_assert, where knowable at compile time`
@@ -84,7 +85,7 @@ Recommendation:
 * "large" and "small" scope border line is subjective, but 3 lines is small,
   member variable (indefinite time scope) is large
 
-Risks: none
+Risks: can cause very minor OOT break between major versions
 
 ### More `constexpr`
 
@@ -93,11 +94,11 @@ Risks: none
 Benefits over `const`:
 * no risk of initialization order breakage
 * can be used in some places where const can't
-* enables compiler optimizations
+* enables compiler and link-time optimizations
 
 Recommendation: Same as for `const`, see above.
 
-Risks: none
+Risks: can cause very minor OOT break between major versions
 
 ### Depointerization
 
@@ -123,7 +124,7 @@ allocations they should use `volk::vector`.
 
 Recommendation:
 * switch all uses of needless pointers to pure objects
-* for arrays, switch to `std::vector<>` or `volk::vector`.
+* for arrays, switch to `std::vector<>` or `volk::vector<>`.
 * where it has to be a pointer, switch to `std` smart pointers
 
 Risks: none
@@ -148,7 +149,8 @@ Recommendation:
 * if making the object copyable is not feasible at this time, delete the copy
   constructor/assignment to prevent accidental copies
 
-Risks: none
+Risks: none. This is between major versions, and if it breaks OOT then
+it was broken already.
 
 ### Boost smart pointers
 
@@ -166,8 +168,11 @@ Benefits of switching to `std`:
 
 Recommendation:
 * Merge a change like [PR 2974][PR2974], breaking ABI before 3.9 release.
+* Use `boost::make_unique` to create new unique pointers. When C++14
+  is allowed a global change to `std::make_unique` is trivial and
+  breaks no API
 
-Risks: none
+Risks: can cause very minor OOT break between major versions
 
 ### Boost locks & threads
 
@@ -197,6 +202,8 @@ require a separate one.
 Recommendation:
 * use `std` locks and threads in new code
 * leave existing boost ones ones alone, to be addressed by a future GREP
+
+Risks: none
 
 ### `volk_malloc`
 
@@ -241,8 +248,11 @@ There are many uses of `assert()` (runtime check) that should be
 Example:
 
 ```c++
-assert(sizeof(fftwf_complex) == sizeof(gr_complex))
+assert(sizeof(fftwf_complex) == sizeof(gr_complex));
 ```
+
+Recommendation:
+* Replace `assert` with `static_assert`, where possible
 
 Risks: none
 
@@ -263,7 +273,7 @@ public:
     {
         d_c = 3;
     }
-    obj(int a, int b) : d_a(a), d_b(b) // Repeated init of d_a.
+    obj(int a, int b) : d_a(a), d_b(b) // Deplication of d_a(a).
     {
         d_c = 3; // Repeated init of d_c;
     }
@@ -278,6 +288,7 @@ In C++11 default member values can be set at declaration time
 ```c++
 class obj
 {
+private:
     int d_a = 0; // Or int d_a{0};
     int d_b = 0;
     int d_c = 3;
@@ -295,6 +306,7 @@ To completely avoid duplication one constructor can call another:
 ```c++
 class obj
 {
+private:
     int d_a = 0; // Or int d_a{0};
     int d_b = 0;
     int d_c = 3;
@@ -323,8 +335,8 @@ Recommendation:
   one day if not already
   * don't change old code that uses constructor initialization, unless already
     changing that bit of the code
-* for future code don't initialize inside the constructor body, especially when
-  it prevents a member being const
+* for future code avoid initialization inside the constructor body,
+  especially when it prevents a member being const
   * for old code change to constructor initialization only if doing other
     changes, or in order to make a member variable const
 
@@ -340,7 +352,7 @@ Recommendation:
 * enums part of API: new enums should all be `enum class`, but leave
   existing ones alone
 
-Risks: none
+Risks: can cause very minor OOT break between major versions
 
 ## Loops
 
@@ -459,10 +471,10 @@ Recommendation:
   needs a feature of `boost::x` not yet in `std`, but another is fine
   either way, then don't change either of them. Specifically this
   applies to mutexes, described above.
-* API-breaking changes are fine before releasing a new minor version,
+* API-breaking changes are fine before releasing a new major version,
   as long as they are switched all the way.
 
-Risks: none
+Risks: can cause very minor OOT break between major versions if part of API
 
 [trigger-points]: https://www.boost.org/doc/libs/1_67_0/doc/html/thread/thread_management.html#thread.thread_management.tutorial.interruption.predefined_interruption_points
 [raw-pointer-to-obj]: https://github.com/gnuradio/gnuradio/pull/2970/commits/d76c2ffdf20e1076eafd5aba83728548c59bfc69
