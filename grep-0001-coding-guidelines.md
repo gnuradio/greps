@@ -6,6 +6,7 @@
 - Status: Active
 
 History:
+- 8-April-2020: Merged Coding Guide from wiki into this doc
 - 12-Feb-2018: Initial Draft
 - 6-May-2018: Cleanup, turned active
 
@@ -113,6 +114,26 @@ and follow them.
   shall be in `UPPER_CASE`.
 * All other identifiers are in STL style, using underscores (e.g., `get_x_value()`).
   Avoid using `CamelCase()`.
+* In the header file, functions should all be written on the same line, up to the 70-character limit, e.g.:
+
+```cpp
+int bar(int arg1, int arg2);
+```
+
+* Curly brace convention is as follows. After a function name, the curly brace should follow on the next line, and the ending curly brace should be on its own line. Inside of a function, such as for an if statement or for loop, the beginning curly brace should come after the statement, while the end curly brace should be on its own line, e.g.:
+
+```cpp
+int foo::bar(int arg1, int arg2)
+{
+if(arg1 == 0) {
+   do something;
+   }
+} else {
+   do something else;
+}
+return 0;
+}
+```
 
 #### Classes
 
@@ -124,7 +145,6 @@ which of the things being assigned to persist outside of the block.
 - All class static data members shall begin with s_`foo`.
 - Each significant class shall be contained in its own file.
 - Prefer non-static data member initialization (NSDMI) where possible
-
 
 #### Boost-specific Guidelines
 
