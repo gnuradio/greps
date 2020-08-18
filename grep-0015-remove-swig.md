@@ -2,7 +2,7 @@
 
 - Original Author: Martin Braun <martin@gnuradio.org>
 - Champion: Josh Morman <mormjb@gmail.com>
-- Status: Draft
+- Status: Final
 
 History:
 - 26-Dec-2018: Initial Draft
@@ -177,9 +177,3 @@ A proposed approach for replacing the current block_gateway is the following:
 - though pybind11 supports custom container classes including boost::shared_ptr, there are some issues with proper downcasting, so std::shared_ptr should be used globally
 - overloaded functions do not get handled automatically require more verbose function pointer casting in the binding definitions - this can be added to the automated tools
 
-
-### Options for a replacement:
-- Boost.Python with auto-generated files (blocktool could be useful here)
-- PyBind11 is similar to Boost.Python. It's header-only and could be shipped
-  with GNU Radio instead of making it a dependency. It would still require
-  auto-generated files as with Boost.Python.
