@@ -1,4 +1,4 @@
-# GREP 0019 -- Restructure GNU Radio Blocks
+# GREP 0020 -- Restructure GNU Radio Blocks
 
 [Note: All parts in square brackets are meant to be replaced as part of
 authoring a new GREP]
