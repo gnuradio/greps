@@ -35,11 +35,10 @@ We recognize the desire of our long term contributors to be able to use VOLK wit
 This may explicitly include proprietary projects.
 We want to enable all contributors to be able to use VOLK wherever they want.
 At the same time, we want to make sure that improvements to VOLK itself are easily obtained by everyone, i.e. strike a balance between permissiveness and strict copyleft.
-Previously, several attemps were made to relicense VOLK without success.
 With a formal process and a clear vision laid out, we hope to be able to get everyone on board.
 
 Since VOLK is a library it should choose a fitting license.
-If we see greater adoption of VOLK in more project, we hope to also see more contributions.
+If we see greater adoption of VOLK in more projects, we are confident that we will receive more contributions.
 May it be bug fixes, new kernels or even contributions to core features.
 
 
