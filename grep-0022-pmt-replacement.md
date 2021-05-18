@@ -1,4 +1,4 @@
-# GREP 0019 -- Restructure GNU Radio Blocks
+# GREP 0022 -- Restructure GNU Radio Blocks
 
 - Original Author: Josh Morman <mormjb@gmail.com>
 - Champion: Josh Morman <mormjb@gmail.com>
