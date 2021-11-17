@@ -1,4 +1,4 @@
-# GREP [XXXX] -- OOTs at same level as modules
+# GREP [0024] -- OOTs at same level as modules
 
 [Note: All parts in square brackets are meant to be replaced as part of
 authoring a new GREP]
@@ -70,11 +70,27 @@ Refer to example OOT in these examples as howto
 
 The net result of this is `from gnuradio import howto`
 
+##### Prefix Considerations
+It might be the case that OOT modules and GNU Radio are installed to different prefixes, but are
+in the same PYTHONPATH.  Using `pkgutils` should be able to resolve the distributed nature of 
+the package - for example, in the `__init__.py` of the top level GNU Radio
+```python
+from pkgutil import extend_path
+__path__ = extend_path(__path__, __name__)
+```
+
 #### C++ header structure
 - Source include path goes from `gr-howto/include/howto` to `gr-howto/include/gnuradio/howto`
 - Header installation path goes from `PREFIX/include/howto` to `PREFIX/include/gnuradio/howto`
 
 The net result of this is `#include <gnuradio/howto/myblock.h>`
+
+##### Prefix Considerations
+When e.g. Debian packages are installed, GNU Radio gets installed to `/usr/`, but OOT modules
+installed from source get installed to `/usr/local`.  This requires that another OOT that references
+the installed OOT is able to use both `#include <gnuradio/anotheroot/header.h>` and 
+`#include <gnuradio/filter/fir_filter.h>`, even though gnuradio in this case refers to both locations
+
 
 #### CMake Structure
 
