@@ -1,11 +1,12 @@
-# GREP [XXXX] -- [Rework gr_modtool's templating]
+# GREP 0026 -- [Rework gr_modtool's templating]
 
 - Original Author: Marcus Müller <mmueller@gnuradio.org>
 - Champion: Marcus Müller <mmueller@gnuradio>
-- Status: Draft
+- Status: Acctive
 
 History:
 - 2021-11-29: Initial Draft
+- 2022-01-17: Set to Active
 
 ## Abstract
 
