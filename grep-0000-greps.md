@@ -2,11 +2,12 @@
 
 - Original Author: Martin Braun <martin@gnuradio.org>
 - Champion: Martin Braun <martin@gnuradio.org>
-- Status: Draft
+- Status: Active
 
 History:
 - 15-Oct-2016: Initial Draft
 - 31-Jan-2018: Updated and renamed to GREP, changed numbering assignment
+- 3-Feb-2022: Updated language to reflect organization updates
 
 (may have multiple original authors)
 
@@ -25,12 +26,12 @@ process.
 ## Copyright / License
 
 This GREP is licensed as CC-BY-ND.
-Copyright 2016 The GNU Radio Foundation.
+Copyright 2016 The GNU Radio Project.
 
 ## Motivation
 
 As the GNU Radio organization grows, we need better ways to discuss and bring
-forward changes. Bug trackers, mailing list threads, IRC discussions, etc., are
+forward changes. Bug trackers, mailing list threads, chat discussions, etc., are
 simply not suitable for well-documented, public discussions. In the following,
 our solution shall be referred to as "the process".
 
@@ -74,20 +75,9 @@ The GREP editors are individuals responsible for managing the administrative and
 editorial aspects of the GREP workflow (e.g. assigning GREP numbers and changing
 their status).
 
-The list of GREP editors always include:
-
-- The GNU Radio Foundation Board members
-- The GNU Radio release manager
-- The GNU Radio community manager
-
-
-The current editors are:
-
-- Martin Braun
-- Ben Hilburn
-- Marcus Müller
-
-The GNU Radio leadership may choose any other individual to be an editor.
+The list of GREP editors always include the board members, and members of the
+General Assembly.
+The General Assembly may choose additional individuals to be a editors.
 
 For any decision that pertains to the technical side of GNU Radio, the
 technical lead of GNU Radio has the final say. The technical side
