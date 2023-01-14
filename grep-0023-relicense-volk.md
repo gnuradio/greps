@@ -2,13 +2,14 @@
 
 - Original Author: [Johannes Demel <demel@uni-bremen.de>]
 - Champion: [Johannes Demel <demel@uni-bremen.de>]
-- Status: Draft
+- Status: Completed
 
 History:
 
 - 18-Mar-2021: Initial Draft
 - 28-Aug-2021: Final Draft
 - 29-Sep-2021: Final
+- 14-Jan-2023: VOLK 3.0.0 is released under LGPLv3+
 
 ## Abstract
 
